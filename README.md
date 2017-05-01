@@ -5,8 +5,8 @@ A Program to download Webtoons.
 ### What is this repository for? ###
 
 This program supports the following sites.
-* 1. (http://mangapanda.com)[http://mangapanda.com]
-* 2. (http://mangaseeonline.us)[http://mangaseeonline.us]
+* 1. [http://mangapanda.com](http://mangapanda.com
+* 2. [http://mangaseeonline.us](http://mangaseeonline.us)
 
 ### Requirements ###
 * Python 3.x
@@ -16,23 +16,23 @@ This program supports the following sites.
 Usage:
 
  1) Command line mode.
-Start cmd. Goto Main folder. Run:
-  	> python md.py [arguments]
+* Start cmd. Goto Main folder. Run:
+  	* > python md.py [arguments]
 
 Arguments:
-	-u, --url : url of main manga page. Put it in double quotes.
-	-b, --begin: Starting chapter number.
-	-e, --end: Chapter to end downloading at.
-	-z, --zip: To zip the downloaded chapters.
-	-a, --all: Downloads all chapters of given series.
-	-A, --Archive: Downloads All available chapters of the series, the
+	* -u, --url : url of main manga page. Put it in double quotes.
+	* -b, --begin: Starting chapter number.
+	* -e, --end: Chapter to end downloading at.
+	* -z, --zip: To zip the downloaded chapters.
+	* -a, --all: Downloads all chapters of given series.
+	* -A, --Archive: Downloads All available chapters of the series, the
                         cover Image and zips them
-	-s, --site: 1 - mangapanda.com, 2 - mangaseeonline.us .(To be used along with --name)
-	-n, --name: The name of the manga series to be downloader.(Should be space delimited.) 
+	* -s, --site: 1 - mangapanda.com, 2 - mangaseeonline.us .(To be used along with --name)
+	* -n, --name: The name of the manga series to be downloader.(Should be space delimited.) 
 
 2) Interactive mode. 
-Start cmd. Goto Main folder. Run:
-> python md.py -i
+* Start cmd. Goto Main folder. Run:
+     * > python md.py -i
 
 Follow the on screen instructions.
 
