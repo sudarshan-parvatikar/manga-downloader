@@ -4,9 +4,9 @@ A Program to download Webtoons.
 
 ### What is this repository for? ###
 
-This program supports the following sites
-* 1) http://mangapanda.com
-* 2) http://mangaseeonline.us
+This program supports the following sites.  
+* 1) http://mangapanda.com  
+* 2) http://mangaseeonline.us  
 
 ### Requirements ###
 * Python 3.x
