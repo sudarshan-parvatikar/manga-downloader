@@ -16,8 +16,8 @@ This program supports the following sites.
 Usage:
 
  1) Command line mode.  
-* Start cmd. Goto Main folder. Run:  
-  	* > python md.py [arguments]  
+   Start cmd. Goto Main folder. Run:  
+  	 > python md.py [arguments]  
 
 Arguments:
 	* -u, --url : url of main manga page. Put it in double quotes.  
@@ -31,8 +31,8 @@ Arguments:
 	* -n, --name: The name of the manga series to be downloader.(Should be space delimited.)  
 
 2) Interactive mode.   
-* Start cmd. Goto Main folder. Run:  
-     * > python md.py -i  
+  Start cmd. Goto Main folder. Run:  
+      > python md.py -i  
 
 Follow the on screen instructions.  
 
