@@ -1,0 +1,12 @@
+
+This is a list of known errors while using this program.
+
+1) Error: "urllib.error.URLError: <urlopen error [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions>
+"
+   Seen in: Win boxes.
+   Cause: Antivirus/Firewall settings in Win boxes, maybe Windows itself restricts the program.
+   Solution: Try Again ^_^ , if problem persisits check your internet connection or try in *nix.
+
+2) Error: Cmd freezes, stops responding.
+   Seen in: Win boxes (of course)
+   Solution: Try again, or better yet, try in linux.
