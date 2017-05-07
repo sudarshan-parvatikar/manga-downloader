@@ -19,6 +19,8 @@ opener.addheaders = [('User-Agent',
                       'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1941.0 Safari/537.36')]
 urllib.request.install_opener(opener)
 
+class InternalError(BaseException):
+    pass
 
 class Mangasee(Model):
     """ Parser for http://mangaseeonline.us/ """
@@ -82,17 +84,32 @@ class Mangasee(Model):
 
     def TotalChapters(self):  # Always call this fn after GetMangaName
         self.Total_Chapters = []
-        TotalChapRegex = re.compile(
-            r'(?<="chapterLabel">Chapter\s)(\d+(\.\d*)?)(?=</span)')  # for '"chapterLabel">Chapter ' Format
-        Total_Chapters = re.findall(TotalChapRegex, self.Main_Html)  # Total_Chapters s in reversed format
-        Total_Chapters = Total_Chapters[::-1]  # Reversing Total_Chapters
-        self.Total_Chapters = list(dict(Total_Chapters).keys())  # Need to improve regex
-        if len(self.Total_Chapters) is 1:  # the value is ['']
-            TotalChapRegex = re.compile(
-                r'(?<="chapterLabel">root\.\s)(\d+(\.\d*)?)(?=</span)')  # for '"chapterLabel">root. ' Format
-            Total_Chapters = re.findall(TotalChapRegex, self.Main_Html)
-            Total_Chapters = Total_Chapters[::-1]
+
+        if len(self.Total_Chapters) is 0:
+            TotalChapRegex = re.compile(r'(?<="chapterLabel">Chapter\s)(\d+(\.\d*)?)(?=</span)')  # for '"chapterLabel">Chapter ' Format
+            Total_Chapters = re.findall(TotalChapRegex, self.Main_Html)  # Total_Chapters s in reversed format
+            Total_Chapters = Total_Chapters[::-1]  # Reversing Total_Chapters
             self.Total_Chapters = list(dict(Total_Chapters).keys())
+
+        elif len(self.Total_Chapters) is 1:  # the value is ['']
+            TotalChapRegex = re.compile(r'(?<="chapterLabel">(root\.)\s)(\d+(\.\d*)?)(?=</span)')  # for '"chapterLabel">root. ' Format
+            Total_Chapters = re.findall(TotalChapRegex, self.Main_Html)
+            Total_Chapters = Total_Chapters[::-1]  # Reversing Total_Chapters
+            self.Total_Chapters = list(dict(Total_Chapters).keys())
+
+        elif len(self.Total_Chapters) is 1:
+            TotalChapRegex = re.compile(r'(?<="chapterLabel">#\s)(\d+(\.\d*)?)(?=</span)')  # for '"chapterLabel"># ' Format
+            Total_Chapters = re.findall(TotalChapRegex, self.Main_Html)
+            Total_Chapters = Total_Chapters[::-1]  # Reversing Total_Chapters
+            self.Total_Chapters = list(dict(Total_Chapters).keys())
+        else:
+            raise InternalError(" An internal problem has occured,"
+                        " please notify the maintainer and use other site(s) till its fixed.\n"
+                        "Error: mangasee-Total-Chapters.")
+
+
+        # Total_Chapters = Total_Chapters[::-1]
+        # self.Total_Chapters = list(dict(Total_Chapters).keys())
         return self.Total_Chapters
 
     def GetCoverImage(self):

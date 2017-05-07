@@ -3,7 +3,7 @@ import os
 import urllib.request
 from urllib.error import HTTPError
 from urllib.request import urlopen
-
+from sys import exit
 import extra
 from parsers import Mangapanda, Mangasee
 
@@ -17,9 +17,9 @@ A Multi Site Manga Downloader.
 """
 __author__ = "Sudarshan Parvatikar"
 __copyright__ = "Copyright 2017"
-__credits__ = ["Sudarshan Parvatikar"]
+__credits__ = "Sudarshan Parvatikar"
 __license__ = "MIT License, Tensai No License"
-__version__ = "3.0"
+__version__ = "4.0"
 __maintainer__ = "Sudarshan(Ashura)"
 __email__ = "ashura@null.net"
 __status__ = "Under Production"
@@ -69,7 +69,16 @@ parser.add_argument("-s",
 
 parser.add_argument("-n",
                     "--name",
-                    help="Enter the name of the manga series.")
+                    help="Enter the name of the manga series, use if you know the correct name. Else use -g option.")
+
+parser.add_argument("-g",
+                    "--guess",
+                    help="Name of manga to be guessed.")
+
+# parser.add_argument("-t",
+#                     "--test",
+#                     action='store_true',
+#                     help="Download a series as test under Archive mode.")
 
 args = parser.parse_args()
 
@@ -79,6 +88,10 @@ if args.interactive is True:
     args.begin = None
     args.end = "int"
     args.zip = None
+
+if args.url is True:
+    args.site = 0
+
 
 if args.all is True:
     """ In All Chapters Downloading mode."""
@@ -92,6 +105,37 @@ if args.Archive is True:
     args.begin = 1
     args.end = "Archive"
 
+if args.guess is not None:
+    if args.site is None:
+        args.site = ("Please input site!!!!\nUse -s option.")
+        exit()
+    url = extra.Guess(int(args.site), args.guess)
+    res = ""
+    try:
+        response = urllib.request.urlopen(url).read().decode('utf-8')
+    except HTTPError:                                                   # if our guess doesnt work
+        match = extra.Search(int(args.site), args.guess)
+        print("Press 'y' for yes, 'n' for no.\n")
+        for m in match:
+            print("Did you mean :\n{}".format(m))
+            res = input()
+            if res is 'y':
+                args.url = extra.Guess(int(args.site), m.lower())
+                matched = m
+                if args.end is None:
+                    args.end = "GuessMode"                  # for clarification.
+                break
+
+    if res is not 'y':
+        print("Could not find manga series.\n Please use -u / --url option.\n Off Out!")
+        exit()
+
+    print("The Selected series is >>> {} <<<".format(matched))
+
+
+
+
+
 if type(args.site) is str and type(args.name) is str:  # Guess the url of the manga series
     try:
         url = extra.Guess(int(args.site), args.name)  # get the guessed url
@@ -103,9 +147,12 @@ if type(args.site) is str and type(args.name) is str:  # Guess the url of the ma
 
 url = ""
 total = 0
+stop = ""
+
+
 if args.url is None:
-    url = str(input(
-        "Enter the url of the manga.\n1)http://www.mangapanda.com/naruto : For mangapanda.com\n2)http://mangaseeonline.us/manga/naruto : For mangaseeonline.us \n"))
+    url = str(input("Enter the url of the manga.\n1)http://www.mangapanda.com/naruto : For "
+                    "mangapanda.com\n2)http://mangaseeonline.us/manga/naruto : For mangaseeonline.us \n"))
 elif args.url is "Guessed":
     pass
 else:
@@ -118,7 +165,7 @@ if args.begin is None:
 else:
     start = int(args.begin)
 
-if args.end is "int":  # "int" : Interactive, None : all chapters
+if args.end is "int" or args.end is "GuessMode":  # "int" : Interactive, None : all chapters
     stop = input("Enter the chapter to stop at.\n")
     try:
         stop = int(stop)
@@ -128,8 +175,7 @@ if args.end is "int":  # "int" : Interactive, None : all chapters
         stop = None
 elif args.end is None:
     stop = None
-else:
-    stop = args.end
+
 
 zip_flag = ""  # Initialize zip_flag
 if args.zip is None:  # interactive mode is enabled
@@ -143,8 +189,9 @@ if args.zip is None:  # interactive mode is enabled
 elif args.zip is True:
     zip_flag = True
 
-site = extra.site(url, int(args.site))
+site = extra.site(url, args.site)
 
+#####################################################################################################################################################
 
 class InvalidSite(BaseException):  # Invalid Site Exception
     pass
@@ -153,16 +200,21 @@ class InvalidSite(BaseException):  # Invalid Site Exception
 class Error(BaseException):  # Other Errors Exception
     pass
 
+######################################################################################################################################################
 
 ## Lets Start downloading
 
-if site is "Mangapanda":
+if site is "Mangapanda" or args.site is 1:
     manga = Mangapanda.Mangapanda(url, start, stop)
     MangaName = manga.GetMangaName()
+    MangaName = extra.Namer(MangaName)
     Site = 1
-elif site is "Mangasee":
+
+elif site is "Mangasee" or args.site is 2:
     manga = Mangasee.Mangasee(url, start, stop)
     MangaName = manga.GetMangaName()
+    MangaName = extra.Namer(MangaName)
+    print(MangaName)
     Site = 2
 else:
     raise InvalidSite("Error Site Not Supported.\nSee help.txt for more.!!!")
@@ -172,24 +224,28 @@ if args.end is "Archive":  # if -A is true, set stop = Total Chapters
     x = manga.TotalChapters()
     stop = len(x)
 else:
-    x = manga.TotalChapters()
-    if Site is 1:
+    x = manga.TotalChapters()                                   # x = total chapters
+    if Site is 1 and args.end is not "GuessMode":               # To avoid confusion
         stop = args.end
-    elif Site is 2:
+    elif Site is 2 and args.end is not "GuessMode":
         if args.end is None:
             args.end = start
             int(args.end)
             stop = len(x[:args.end])
+        else:
+            stop = int(args.end)                                # if -e is given
+            stop = len(x[: int(args.end)])                      #stop = 0 to args.end
+
+
+print("Total Chapters Available : [].".format(stop))
 
 #################################################################################################################################################################
 
 """ Main Logic For Downloading. """
-
 if stop is None or start == stop:
 
     """ single chapter downloading mode """
 
-    # MangaName = manga.GetMangaName()
     cwd = os.getcwd()
     NewPath = os.path.join(cwd, str(MangaName))
     extra.MakeDir(str(MangaName), NewPath)
@@ -220,12 +276,14 @@ else:
     # Making a New folder for MangaName
     cwd = os.getcwd()
     NewPath = os.path.join(cwd, str(MangaName))
+    print(NewPath)
     extra.MakeDir(str(MangaName), NewPath)
 
     if args.Archive is True:  # Archive mode
         manga.GetCoverImage()  # gets cover image under Archive Mode
 
-    for i in range(start, stop + 1):  # i = Chapter Number(generally)
+    print("stop is {}".format(stop))
+    for i in range(start, int(stop) + 1):  # i = Chapter Number(generally)
         if Site is 1:
             total = manga.TotalPgs(i)  # mangapanda is consistent in naming, so i is not altered
         elif Site is 2:
@@ -248,5 +306,7 @@ else:
             extra.zip(str(i), ChapterPath)
             print("Chapter-{} is Zipped!".format(i))
             extra.DeleteDir(ChapterPath)
+        else:
+            os.chdir('..')
 
 print("Download Complete!!!\n")

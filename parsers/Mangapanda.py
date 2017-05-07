@@ -58,10 +58,14 @@ class Mangapanda(Model):
 
     def GetMangaName(self):
         """ This Function returns the name of the Manga of the given url. """
-        MangaNameRegex = re.compile(r'(?<="aname">)\w{1,}(?=</h)')
         MangaNameHtml = urllib.request.urlopen(self.url).read().decode('utf-8')
         self.Main_Html = MangaNameHtml
-        MangaName = re.search(MangaNameRegex, MangaNameHtml).group(0)
+        try:
+            MangaNameRegex = re.compile(r'(?<="aname">)\w{1,}(?=</h2>)')
+            MangaName = re.search(MangaNameRegex, MangaNameHtml).group(0)
+        except AttributeError:
+            MangaNameRegex = re.compile(r'(?<="aname">)\w{1,}.*(?=</h2>)')
+            MangaName = re.search(MangaNameRegex, MangaNameHtml).group(0)
         return MangaName
 
     def CurrentUrl(self, chapter, number):
@@ -82,3 +86,4 @@ class Mangapanda(Model):
         image_url = re.search(r'(?<=img\ssrc=").*\.(jpg|png)(?="\salt=")', self.Main_Html).group(0)
         urllib.request.urlretrieve(image_url, 'Cover Image.jpg')
         print("Got Cover Image.")
+

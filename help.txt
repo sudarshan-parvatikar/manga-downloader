@@ -1,3 +1,19 @@
+
+MangaDownloader
+Author: Sudarshan Parvatiakar.
+Version: 4.0
+
+Features:
+1) Downloads Manga (Well, Duh!).
+2) Organizes chapters into folders.
+3) Zips them if needed.
+4) Can download over a range of chapters.
+5) Can download all the chapters and creates zipped chapters.
+6) You can only give the name and it'll find the url.
+7) if you remember only partial name, fret not. Use the -g option.
+8) Takes Care of folder naming, renaming nad deletion.
+9) Also has an interactive mode for n00bs.
+
 Usage:
 
  1) Command line mode.
@@ -13,7 +29,12 @@ Arguments:
 	-A, --Archive: Downloads All available chapters of the series, the
                         cover Image and zips them
 	-s, --site: 1 - mangapanda.com, 2 - mangaseeonline.us .(To be used along with --name)
-	-n, --name: The name of the manga series to be downloader.(Should be space delimited.) 
+	-n, --name: The name of the manga series to be downloaded.(Should be space delimited.)
+	-g, --guess: Partial name of the series, the downloader tries to find a match. The Downloader will ask if displayed match is correct, if no match is selected, it exists.
+
+Note: Always use the following together:-
+      1) -g and -s
+      2) -n and -s
 
 2) Interctive mode. 
 Start cmd. Goto Main folder. Run:

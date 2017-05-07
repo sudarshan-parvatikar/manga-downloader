@@ -1,12 +1,20 @@
 
 This is a list of known errors while using this program.
 
-1) Error: "urllib.error.URLError: <urlopen error [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions>
+1) Error: "urllib.error.URLError: <urlopen error [WinError xxxxxx] blah blah...
 "
    Seen in: Win boxes.
-   Cause: Antivirus/Firewall settings in Win boxes, maybe Windows itself restricts the program.
-   Solution: Try Again ^_^ , if problem persisits check your internet connection or try in *nix.
+   Cause: Anti virus/Firewall settings in Win boxes, maybe Windows itself restricts the program.
+   Solution: Try Again ^_^ , if problem persists check your internet connection or try in *nix.
 
 2) Error: Cmd freezes, stops responding.
    Seen in: Win boxes (of course)
    Solution: Try again, or better yet, try in linux.
+
+3) Error: FileExistsError: [WinError 183] Cannot create a file when that file already exists: MangaFolderName
+   Seen in: All boxes; Purposely kept, to avoid over writing chapters by mistake.
+   Solution: Check the folder for contents, copy elsewhere and delete it.
+
+4) Error: InternalError: blah blah.
+   Seen in : Platform non specific.
+   Solution: Caused when the sites internal structure has been changed, so the current methods dont work. Inform the maintainer with the error code/string.

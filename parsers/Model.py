@@ -45,3 +45,4 @@ class Model(metaclass=abc.ABCMeta):
     def GetCoverImage(self):
         """ Gets the Cover Image on the main manga page. """
         return
+
