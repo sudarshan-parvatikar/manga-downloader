@@ -29,6 +29,11 @@ Arguments:
                         cover Image and zips them.  
 	* -s, --site: 1 - mangapanda.com, 2 - mangaseeonline.us .(To be used along with --name)  
 	* -n, --name: The name of the manga series to be downloader.(Should be space delimited.)  
+        * -g, --guess: Partial name of the series, the downloader tries to find a match. The Downloader will ask if displayed match is correct, if no match is selected, it exists.
+
+* Note: Always use the following together:-
+      1) -g and -s
+      2) -n and -s
 
 2) Interactive mode.   
   Start cmd. Goto Main folder. Run:  
