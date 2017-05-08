@@ -36,7 +36,7 @@ Note: Always use the following together:-
       1) -g and -s
       2) -n and -s
 
-2) Interctive mode. 
+2) Interactive mode. 
 Start cmd. Goto Main folder. Run:
 > python md.py -i
 
